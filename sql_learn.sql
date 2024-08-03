@@ -22,6 +22,19 @@ CREATE TABLE person (
     address TEXT                              -- Text type for longer addresses
 );
 
+-- primary key anf forigen key
+CREATE TABLE Departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50)
+);
+
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    department_id INT,
+    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
 
 
 -- insert
