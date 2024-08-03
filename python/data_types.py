@@ -9,6 +9,10 @@ repeated_fruits = a * 2  # ['apple', 'banana', 'cherry', 'apple', 'banana', 'che
 
 fruits.append('fig')  # ['apple', 'banana', 'cherry', 'fig']
 fruits.insert(1, 'blueberry')  # ['apple', 'blueberry', 'banana', 'cherry', 'fig']
+ndex = fruits.index('cherry')
+fruits.sort()
+fruits.reverse()
+fruits_copy = fruits.copy() #shallow copy
 
 fruits.remove('banana')  # ['apple', 'blueberry', 'cherry', 'fig']
 last_fruit = fruits.pop()  # 'fig'; list is now ['apple', 'blueberry', 'cherry']
@@ -46,7 +50,7 @@ print(my_dict)  # Output: {'a': 1, 'c': 3}
 key, value = my_dict.popitem()  # Removes and returns the last key-value pair
 print(my_dict)  # Output might be: {'a': 1, 'b': 2}
 print(key, value)  # Output: 'c' 3
-
+name = person.get('name')
 
 
 keys = person.keys()  # dict_keys(['name', 'city'])
@@ -76,11 +80,11 @@ is_present = 2 in unique_numbers  # True
 set1 = {1, 2, 3}
 set2 = {3, 4, 5}
 union_set = set1 | set2  # {1, 2, 3, 4, 5}
-
+union_set = set1.union(set2)
 intersection_set = set1 & set2  # {3}
-
+intersection_set = set1.intersection(set2)
 difference_set = set1 - set2  # {1, 2}
-
+difference_set = set1.difference(set2)
 sym_diff_set = set1 ^ set2  # {1, 2, 4, 5}
 
 squares_set = {x**2 for x in range(5)}  # {0, 1, 4, 9, 16}
