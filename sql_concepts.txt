@@ -1,0 +1,61 @@
+1. Database Design:
+    * Understanding of tables, columns, rows.
+    * Primary and foreign keys.
+    * Normalization and denormalization.
+2. SQL Queries:
+    * SELECT, INSERT, UPDATE, DELETE.
+    * JOIN operations (INNER, LEFT, RIGHT, FULL).
+    * Aggregate functions (SUM, AVG, COUNT, etc.).
+    * GROUP BY and HAVING clauses.
+    * Subqueries and nested queries.
+    * UNION and UNION ALL.
+3. Indexes:
+    * Purpose of indexes.
+    * Creating and managing indexes.
+    * Understanding of clustered and non-clustered indexes.
+4. Stored Procedures and Functions:
+    * Creating and using stored procedures.
+    * Creating and using functions.
+5. Transactions:
+    * ACID properties (Atomicity, Consistency, Isolation, Durability).
+    * COMMIT and ROLLBACK.
+    * Transaction isolation levels.
+Advanced Concepts:
+1. Database Optimization:
+    * Query optimization techniques.
+    * Understanding and analyzing query execution plans.
+    * Indexing strategies.
+2. Views:
+    * Creating and using views.
+    * Updatable views.
+3. Triggers:
+    * Creating and using triggers.
+    * Understanding trigger events (BEFORE, AFTER).
+4. Database Security:
+    * User roles and permissions.
+    * Securing database connections.
+5. Data Migration and Backup:
+    * Methods for data migration.
+    * Backup and restore strategies.
+Python and MySQL Integration:
+1. Database Connection:
+    * Using MySQL connector libraries (like mysql-connector-python or PyMySQL).
+    * Establishing and managing connections.
+2. Executing Queries:
+    * Executing CRUD operations from Python.
+    * Handling results and exceptions.
+3. ORM (Object-Relational Mapping):
+    * Using ORMs like SQLAlchemy for database operations.
+    * Advantages and use cases of ORM.
+4. Database Testing:
+    * Writing tests for database operations.
+    * Mocking database interactions.
+Practical Knowledge:
+1. Hands-on Practice:
+    * Writing and executing complex SQL queries.
+    * Setting up and managing a MySQL database.
+    * Integrating MySQL with a Python application.
+    * Handling real-world scenarios like database migrations, optimizations, and troubleshooting.
+2. Project Experience:
+    * Be prepared to discuss past projects where you used MySQL with Python.
+    * Explain the challenges faced and solutions implemented.
