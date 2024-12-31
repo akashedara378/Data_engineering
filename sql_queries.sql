@@ -18,7 +18,8 @@ CREATE TABLE person (
     is_active BOOLEAN,                        -- Boolean type for status
     salary DECIMAL(10, 2),                    -- Decimal type for salary with 2 decimal places
     hire_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp type with default current time
-    phone_number CHAR(15),                    -- Fixed-length string for phone number
+    phone_number CHAR(15),                   - Fixed-length string for phone number
+    id INT check(id>1),
     address TEXT                              -- Text type for longer addresses
 );
 
