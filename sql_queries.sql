@@ -295,3 +295,20 @@ GO;
 exec proc2 @id=10;
 
 
+--trigger
+
+CREATE TRIGGER tg1
+ON table1
+AFTER DELETE
+AS
+BEGIN
+    INSERT INTO backup_table (col1, col2, del_date)
+    SELECT 
+        col1,
+        col2,
+        GETDATE()
+    FROM deleted;
+END;
+
+
+
