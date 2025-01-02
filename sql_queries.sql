@@ -165,6 +165,8 @@ WHERE customer_id > 5
 ORDER BY first_name
 LIMIT 3;
 
+select * from customers limit 3, 3;
+
 select top 3 * from employees;
 select top 2 * from employees order by salary desc;
 
@@ -180,23 +182,13 @@ SELECT first_name, last_name, points, (points * 10 + 20) AS discount_factor
 FROM customers;
 
 --colease
-
 select name, COALESCE(col1, "unknown") as col1 from table1;
 
 select name, COALESCE(col1, col2, "unknown") as col1 from table1;
 
-
-
 -- order by
-
 select * from customers
 order by state DESC;
-
--- limit
-select * from customers limit 3;
-
-select * from customers limit 3, 3;
-
 
 -- joins
 select * from customers, orders;
@@ -224,7 +216,6 @@ select * from sql_store.order_items oi join sql_inventory.products p on oi.produ
 select * from employees e join employees m on e.reports_to = m.employee_id;
 
 -- implict joins(no join syntax)
-use sql_store;
 select * from customers c , orders o where c.customer_id = o.customer_id;
 
 -- UNION and UNION ALL
@@ -246,26 +237,61 @@ FROM customers c
 JOIN orders o 
  USING (customer_id);
 
+--windows fucntions : advanced analytical queries
+--types of windows functions
+--agg: max(), min(), sum(), count(), avg()
+--ROW_NUMBER(): Assigns a unique number to each row, starting from 1.
+RANK(): Similar to ROW_NUMBER() but with the same rank for equal values and leaves gaps in the ranking.
+DENSE_RANK(): Similar to RANK(), but it does not leave gaps between ranks.
+NTILE(): Divides the result set into a specified number of roughly equal groups.
 
--- cross
-SELECT *
-FROM customers 
-CROSS JOIN products;
+--find min amount of each region
+select *, MIN(col1) OVER(PARTITION BY region) from sales;
 
--- union
-SELECT first_name
-FROM customers 
-UNION
-SELECT name
-FROM shippers;
+select *, ROW_NUMBER() OVER(ORDER BY salary ASC) as RN from employees;
 
--- insert
-INSERT INTO customers(first_name, last_name, points)
-VALUES ('Akash', 'edara', default);
+select *, RANK() OVER(ORDER BY salary ASC) as RN from employees;
 
-INSERT INTO customers(first_name, last_name, points)
-VALUES ('Akash', 'edara', default),
-       ('Akash', 'edara', default);
+select *, DENSE_RANK() OVER(ORDER BY salary ASC) as RN from employees;
+
+--lead() and lag(): are used to access the data from the next/previous row.
+--lead -> next and lag-> previous
+
+select *, lag(salary) OVER(order by exp) as new_Sal from employess;
+
+--previous to previous
+select *, lag(salary,2) OVER(order by exp) as new_Sal from employess; 
+
+select *, lag(salary,2,0) OVER(order by exp) as new_Sal from employess;
+
+select *, lead(salary) OVER(order by exp) as new_Sal from employess;
 
 
-Error Code: 1364. Field 'last_name' doesn't have a default value
+---CTE: common table expression which will be used to store temporary result
+
+with cte as(select * from employees)
+select * from cte;
+
+--views: virtual tables, it does not store data physcially but store the query that generates data.
+create view view1 as select col1,col2 from table1;
+
+select * from view1;
+
+drop view view1;
+
+--stored procs
+create procedure proc1
+as
+select * from abc
+GO;
+
+exec proc1 ;
+
+create procedure proc2 @id INT
+as
+select * from table1 where id=@id
+GO;
+
+exec proc2 @id=10;
+
+
