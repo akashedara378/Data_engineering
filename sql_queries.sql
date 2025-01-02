@@ -12,8 +12,8 @@ show tables;
 
 CREATE TABLE person (
     person_id INT PRIMARY KEY,                -- Integer type for unique identifier
-    first_name VARCHAR(50),                   -- Variable-length string for first name
-    last_name VARCHAR(50),                    -- Variable-length string for last name
+    first_name VARCHAR(50) NOT NULL,                   -- Variable-length string for first name
+    last_name VARCHAR(50) UNIQUE,                    -- Variable-length string for last name
     email VARCHAR(100),                       -- Variable-length string for email
     date_of_birth DATE,                       -- Date type for birthdate
     is_active BOOLEAN,                        -- Boolean type for status
@@ -32,13 +32,11 @@ CREATE TABLE employee (
 );
     
 -- insert
-INSERT INTO customers(first_name, last_name, points)
-VALUES ('Akash', 'edara', default);
+INSERT INTO customers(first_name, last_name, points) VALUES ('Akash', 'edara', default);
+INSERT INTO customers(first_name, last_name, points) VALUES ('Akash', 'edara', default),('Akash', 'edara', default);
 
-INSERT INTO customers(first_name, last_name, points)
-VALUES ('Akash', 'edara', default),
-       ('Akash', 'edara', default);
--- primary key anf forigen key
+
+-- primary key and forigen key
 CREATE TABLE Departments (
     department_id INT PRIMARY KEY,
     department_name VARCHAR(50)
@@ -53,63 +51,33 @@ CREATE TABLE Employees (
 );
 
 
-
+-- update and alter, delete
        
-UPDATE employees
-SET department = 'HR'
-WHERE last_name = 'Doe';
+UPDATE employees SET department = 'HR' WHERE last_name = 'Doe';
 
-DELETE FROM employees
-WHERE last_name = 'Doe';
+DELETE FROM employees WHERE last_name = 'Doe';
 
-SELECT salesperson, SUM(amount) AS total_sales
-FROM sales
-GROUP BY salesperson
-HAVING SUM(amount) > 4000;
+ALTER TABLE employees ADD col1 VARCHAR(20);
 
--- union
-SELECT first_name
-FROM customers 
-UNION
-SELECT name
-FROM shippers;
+ALTER TABLE employees DROP COLUMN col1;
 
--- union
-SELECT first_name
-FROM customers 
-UNION ALL
-SELECT name
-FROM shippers;
+ALTER TABLE employees MODIFY col1 INT;
 
-SELECT employee_name
-FROM employees
-WHERE department_id IN (SELECT department_id FROM departments WHERE location = 'New York');
+-- filter and sort
+select * from table1 where col1 = 10;
 
-use sql_store;
+select * from table1 order by col1 ASC;
 
-SELECT *
-FROM customers 
-WHERE customer_id > 5
-ORDER BY first_name
-LIMIT 3;
+select * from table1 order by col2 DESC;
 
-select 
-first_name, last_name, points*10 + 100
-from customers;
+-- TRuncate and drop
+TRUNCATE TABLE table1;
 
--- Using expressions
-SELECT first_name, last_name, points, (points * 10 + 20) AS discount_factor
-FROM customers;
+DROP TABLE table1;
 
--- Removing duplicates
-SELECT DISTINCT state
-FROM customers
-
-
+--condtions
 —- AND (both conditions must be True) 
-SELECT *
-FROM customers 
-WHERE birth_date > '1990-01-01' AND points > 1000 
+SELECT * FROM customers WHERE birth_date > '1990-01-01' AND points > 1000 
 
 —- OR (at least one condition must be True) 
 SELECT *
@@ -164,6 +132,60 @@ where first_name REGEXP 'i[e]';
 select * 
 from customers
 where phone is NULL;
+
+
+-- AGG"S and Groupby, HAVING
+SELECT COUNT(*) AS total_employees
+FROM employees;
+
+SELECT SUM(salary) AS total_salary
+FROM employees;
+
+SELECT AVG(salary) AS average_salary
+FROM employees;
+
+SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary
+FROM employees;
+
+select SUM(salary) as total_salary, department from employees group by department;
+
+SELECT salesperson, SUM(amount) AS total_sales FROM sales
+GROUP BY salesperson
+HAVING SUM(amount > 4000;
+
+--subquery
+SELECT employee_name
+FROM employees
+WHERE department_id IN (SELECT department_id FROM departments WHERE location = 'New York');
+
+-- top and limit
+SELECT *
+FROM customers 
+WHERE customer_id > 5
+ORDER BY first_name
+LIMIT 3;
+
+select top 3 * from employees;
+select top 2 * from employees order by salary desc;
+
+-- distinct
+select distinct name,id from employees;
+
+--advance select
+select 
+first_name, last_name, points*10 + 100
+from customers;
+
+SELECT first_name, last_name, points, (points * 10 + 20) AS discount_factor
+FROM customers;
+
+--colease
+
+select name, COALESCE(col1, "unknown") as col1 from table1;
+
+select name, COALESCE(col1, col2, "unknown") as col1 from table1;
+
+
 
 -- order by
 
