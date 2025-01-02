@@ -5,6 +5,7 @@ create database if not exists db1;
 drop database if exists db1;
 drop database db1;
 
+use database db1;
 
 show databases;
 show tables;
@@ -23,6 +24,20 @@ CREATE TABLE person (
     address TEXT                              -- Text type for longer addresses
 );
 
+CREATE TABLE employee (
+    ID INT,
+    Name VARCHAR(30),
+    Address VARCHAR(50),
+    salary INR
+);
+    
+-- insert
+INSERT INTO customers(first_name, last_name, points)
+VALUES ('Akash', 'edara', default);
+
+INSERT INTO customers(first_name, last_name, points)
+VALUES ('Akash', 'edara', default),
+       ('Akash', 'edara', default);
 -- primary key anf forigen key
 CREATE TABLE Departments (
     department_id INT PRIMARY KEY,
@@ -38,13 +53,7 @@ CREATE TABLE Employees (
 );
 
 
--- insert
-INSERT INTO customers(first_name, last_name, points)
-VALUES ('Akash', 'edara', default);
 
-INSERT INTO customers(first_name, last_name, points)
-VALUES ('Akash', 'edara', default),
-       ('Akash', 'edara', default);
        
 UPDATE employees
 SET department = 'HR'
@@ -171,49 +180,43 @@ select * from customers limit 3, 3;
 select * from customers, orders;
 
 -- inner
+select * from customers c join orders o on c.customer_id = o.customer_id;
+select * from customers c INNER JOIN orders o on c.id = o.id;
 
-select * 
-from customers c
-join orders o
-on c.customer_id = o.customer_id;
+-- left
+SELECT * FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id;
+
+-- right
+SELECT * FROM customers c RIGHT JOIN orders o ON c.customer_id = o.customer_id;
 
 -- outer
-SELECT *
-FROM customers c
-LEFT JOIN orders o 
-ON c.customer_id = o.customer_id;
+SELECT * FROM customers c FULL JOIN orders o ON c.customer_id = o.customer_id;
 
--- inner
-SELECT distinct c.customer_id
-FROM customers c
-right JOIN orders o 
-ON c.customer_id = o.customer_id;
+-- cross
+SELECT * FROM customers CROSS JOIN orders;
 
 -- join across dbs
-
-select *
-from sql_store.order_items oi
-join sql_inventory.products p
-on oi.product_id = p.product_id; 
+select * from sql_store.order_items oi join sql_inventory.products p on oi.product_id = p.product_id; 
 
 -- self join
+select * from employees e join employees m on e.reports_to = m.employee_id;
 
-use sql_hr;
-
-select * from employees e
-join employees m
-on e.reports_to = m.employee_id;
-
--- implict joins
+-- implict joins(no join syntax)
 use sql_store;
-select * 
-from customers c , orders o
-where c.customer_id = o.customer_id;
+select * from customers c , orders o where c.customer_id = o.customer_id;
 
--- full join
-SELECT employees.emp_name, departments.dept_name
-FROM employees
-FULL JOIN departments ON employees.dept_id = departments.dept_id;
+-- UNION and UNION ALL
+SELECT *
+FROM table1
+UNION
+SELECT *
+FROM table2;
+
+SELECT *
+FROM table1
+UNION ALL
+SELECT *
+FROM table2;
 
 -- using clause
 SELECT *
