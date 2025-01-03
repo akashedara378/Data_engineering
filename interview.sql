@@ -177,4 +177,27 @@ set cb.brand_name=c2.new_brand;
 
 select * from Chocolate_Brands;
 
+---
+create table customer_orders (
+order_id integer,
+customer_id integer,
+order_date date,
+order_amount integer
+);
 
+insert into customer_orders values(1,100,cast('2022-01-01' as date),2000),(2,200,cast('2022-01-01' as date),2500),(3,300,cast('2022-01-01' as date),2100)
+,(4,100,cast('2022-01-02' as date),2000),(5,400,cast('2022-01-02' as date),2200),(6,500,cast('2022-01-02' as date),2700)
+,(7,100,cast('2022-01-03' as date),3000),(8,400,cast('2022-01-03' as date),1000),(9,600,cast('2022-01-03' as date),3000);
+
+
+
+
+with first_vist as(
+select customer_id, min(order_date) as first_vist from customer_orders group by customer_id
+)
+
+select t2.*, t1.first_vist,
+case when t2.order_date=t1.first_vist then 'new' else "repeated" end as customer_type
+from first_vist t1
+inner join customer_orders t2
+on t1.customer_id=t2.customer_id;
