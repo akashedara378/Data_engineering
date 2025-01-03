@@ -143,3 +143,38 @@ select * from Employee where left(department,1)=right(department,1);
 --- first two and last two char same
 select * from Employee where left(department,2)=right(department,2);
 
+---
+
+CREATE TABLE Chocolate_Brands (
+    chocolate_name VARCHAR(50),
+    brand_name VARCHAR(50)
+);
+
+INSERT INTO Chocolate_Brands (chocolate_name, brand_name) VALUES
+('KitKat', 'Nestle'),
+('Perk', NULL),
+('Munch', NULL),
+('Dairy Milk', 'Cadbury'),
+('5 Star', NULL),
+('Silk', NULL);
+
+
+with cte as(
+select *, row_number() over(order by(select not null)) as rn,
+case when brand_name is not null then 1 else 0 end rn1 
+from Chocolate_Brands
+), cte1 as(
+select *, sum(rn1) over(order by rn) roll_sum from cte
+), cte2 as(
+select chocolate_name, brand_name, max(brand_name) over(partition by roll_sum) as new_brand from cte1
+)
+
+
+update Chocolate_Brands cb 
+join cte2 c2 
+on cb.chocolate_name=c2.chocolate_name
+set cb.brand_name=c2.new_brand;
+
+select * from Chocolate_Brands;
+
+
