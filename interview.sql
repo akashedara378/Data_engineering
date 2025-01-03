@@ -107,3 +107,39 @@ select *
 from table1 as t1
 full join table2 as t2 
 on t1.id=t2.id;
+
+
+--schema
+create table table1 as
+select * from Employee
+where 1=2;
+select * from table1;
+
+--data
+create table table2 as
+select * from Employee
+where 1=1;
+select * from table2;
+
+--- not supported in mysql
+select * into table1 from Employee where 1=2;
+select * from table1;
+
+select * from Employee where employee_name like "A%";
+
+select month(current_timestamp);
+select year(current_timestamp);
+select day(current_timestamp);
+
+--- not on mysql
+select getdate();
+
+--- not on mysql
+select * from Employee for xml auto;
+
+--- first and last char same
+select * from Employee where left(department,1)=right(department,1);
+
+--- first two and last two char same
+select * from Employee where left(department,2)=right(department,2);
+
