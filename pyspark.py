@@ -469,3 +469,9 @@ rd3 = sc.parallelize([('a', 1), ('b', 2), ('a', 3), ('b', 4)])
 rd3_map = rd3.reduceByKey(lambda x,y:x+y)
 
 rd3_map.collect()
+
+
+#cache and persist
+df.cache()
+df.persist(StorageLevel.MEMORY_ONLY)
+df.persist(StorageLevel.MEMORY_AND_DISK)
