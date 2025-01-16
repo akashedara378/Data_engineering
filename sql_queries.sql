@@ -30,6 +30,10 @@ CREATE TABLE employee (
     Address VARCHAR(50),
     salary INR
 );
+
+create index index1 on table1(col1);
+
+create index index2 on table1(col2,col3);
     
 -- insert
 INSERT INTO customers(first_name, last_name, points) VALUES ('Akash', 'edara', default);
@@ -54,17 +58,6 @@ CREATE TABLE Employees (
 -- update and alter, delete
        
 UPDATE employees SET department = 'HR' WHERE last_name = 'Doe';
-
-update employees
-SET department = case
-                        when id=1 then 'HR'
-                        when id=2 then 'abc'
-                 end,
-     col2 = case
-                when id=1 then 10
-                when id=2 then 20
-            end
-where id in (1,2,3);
 
 DELETE FROM employees WHERE last_name = 'Doe';
 
@@ -144,6 +137,25 @@ select *
 from customers
 where phone is NULL;
 
+-- case when
+update employees
+SET department = case
+                        when id=1 then 'HR'
+                        when id=2 then 'abc'
+                 end,
+     col2 = case
+                when id=1 then 10
+                when id=2 then 20
+            end
+where id in (1,2,3);
+
+SELECT id, name,
+       CASE 
+           WHEN salary > 50000 THEN 'High'
+           WHEN salary BETWEEN 30000 AND 50000 THEN 'Medium'
+           ELSE 'Low'
+       END AS salary_category
+FROM employees;
 
 -- AGG"S and Groupby, HAVING
 SELECT COUNT(*) AS total_employees
