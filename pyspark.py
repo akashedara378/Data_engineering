@@ -237,6 +237,22 @@ df.fillna(value, subset=['col1', 'col2'])  # Fill specific columns
 
 d1.na.fill("", ['name']).na.fill("10",['id']).show()
 
+# Drop rows with any null value
+df.dropna()
+
+# Drop rows where all values are null
+df.dropna(how='all')
+
+# Drop rows based on null values in specific columns
+df.dropna(subset=["id"])
+
+# Drop rows with fewer than 2 non-null values
+df.dropna(thresh=2)
+
+# Drop rows where either 'id' or 'value' is null
+df.dropna(subset=["id", "value"], how="any")
+
+
 # COMMAND ----------
 
 # Small DataFrame
