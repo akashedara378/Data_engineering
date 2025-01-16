@@ -55,6 +55,17 @@ CREATE TABLE Employees (
        
 UPDATE employees SET department = 'HR' WHERE last_name = 'Doe';
 
+update employees
+SET department = case
+                        when id=1 then 'HR'
+                        when id=2 then 'abc'
+                 end,
+     col2 = case
+                when id=1 then 10
+                when id=2 then 20
+            end
+where id in (1,2,3);
+
 DELETE FROM employees WHERE last_name = 'Doe';
 
 ALTER TABLE employees ADD col1 VARCHAR(20);
