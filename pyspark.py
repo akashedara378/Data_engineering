@@ -448,3 +448,24 @@ df2 = df1.groupBy(df.name).agg(collect_set(struct("item","total_weight")).alias(
 
 df2.display()
 
+#rdd
+from pyspark import SparkContext
+
+sc = SparkContext("local", "maps")
+
+rd1 = sc.parallelize([1,2,3])
+rd1_maped = rd1.map(lambda x:x*2)
+
+rd1_maped.collect()
+
+
+rd2 = sc.parallelize([1,2,3])
+rd2_maped = rd2.flatMap(lambda x:(x*2,x*3))
+
+rd2_maped.collect()
+
+
+rd3 = sc.parallelize([('a', 1), ('b', 2), ('a', 3), ('b', 4)])
+rd3_map = rd3.reduceByKey(lambda x,y:x+y)
+
+rd3_map.collect()
