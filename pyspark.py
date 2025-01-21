@@ -475,3 +475,10 @@ rd3_map.collect()
 df.cache()
 df.persist(StorageLevel.MEMORY_ONLY)
 df.persist(StorageLevel.MEMORY_AND_DISK)
+
+
+#stream
+df = spark.readStream \
+    .format("json") \
+    .schema("id INT, category STRING, value DOUBLE, timestamp STRING") \
+    .load("/path/to/streaming/data")
