@@ -536,11 +536,10 @@ delta_table.alias("old").merge(
     "old.id = new.id"
 ).whenNotMatchedInsertAll().execute()
 
-# Update Existing Record
-delta_table.update(
-    condition="id = 1",
-    set={"salary": "90000"}  # Updating Alice's salary
-)
+delta_table.alias("old").merge(
+    df_new.alias("new"),
+    "old.id = new.id"
+).whenMatchedUpdate(set={"old.salary": "new.salary"}).whenNotMatchedInsertAll().execute()
 
 # Delete a Record
 delta_table.delete("id = 3")  # Deletes Charlie's record
