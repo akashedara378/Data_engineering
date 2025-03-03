@@ -1,21 +1,21 @@
-def count_and_compress(s: str) -> str:
-    if not s:
-        return "null"
-    
-    op = []
-    count =1
+def count_and_compress(s):
+    l1 = []
+    count = 1
     
     for i in range(1, len(s)):
+        
         if s[i] == s[i-1]:
             count +=1
         else:
-            op.append(s[i-1])
-            op.append(str(count))
-            count =1
-    op.append(s[-1])
-    op.append(str(count))
-    return "".join(op)
+            l1.append(s[i-1])
+            l1.append(str(count))
+            count = 1
+        
     
+    l1.append(s[-1])
+    l1.append(str(count))
+  
+    return "".join(l1)
 
 # Test cases
 print(count_and_compress("aaabbbccdaa"))  # Output: "a3b3c2d1a2"
