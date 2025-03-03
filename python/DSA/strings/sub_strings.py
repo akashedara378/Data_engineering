@@ -1,12 +1,10 @@
-def all_substrings(s: str) -> list:
-    substrings = []
-    length = len(s)
-    
-    for i in range(length):
-        for j in range(i+1, length+1):
-            substrings.append(s[i:j])
+def all_substrings(s):
+    result = []
+    for i in range(len(s)):
+        for j in range(i+1, len(s)+1):
+            result.append(s[i:j])
             
-    return substrings
+    return result
 
 # Test cases
 print(all_substrings("abc"))  # Output: ['a', 'ab', 'abc', 'b', 'bc', 'c']
