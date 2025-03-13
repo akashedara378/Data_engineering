@@ -135,6 +135,10 @@ df.dropDuplicates(['name']).show()
 
 df.distinct().show()
 
+#difference
+df1.subtract(df2).show()
+df1.intersect(df2).show()
+
 df_renamed = df.withColumnRenamed("name", "full_name")
 df_renamed.show()
 
