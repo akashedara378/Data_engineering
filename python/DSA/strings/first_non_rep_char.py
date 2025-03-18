@@ -1,18 +1,15 @@
-#first non repeating character
-def first_non_repeating_char(s: str) -> str:
-    dict1 = {}
-    
-    for i in s:
-        if i in dict1:
-            dict1[i] +=1
-        else:
-            dict1[i] =1
+def first_non_repeating_char(s):
+    char_count = {}
     
     for char in s:
-        if dict1[char] == 1:
-            return char
+        char_count[char] = char_count.get(char,0) + 1
     
-    return "nothing"
+    for char in s:
+        if char_count[char] == 1:
+            return char  
+    
+    return None
+
 
 # Test cases
 print(first_non_repeating_char("leetcode"))  # "l"
