@@ -13,3 +13,30 @@ Reduce partitions for smaller datasets (coalesce()).
 8️⃣ Tune Spark Configurations
 Adjust spark.sql.shuffle.partitions.
 Optimize executor memory (--executor-memory & --executor-cores).
+
+
+OOM:
+1️⃣ Increase Executor & Driver Memory
+Set higher memory limits:
+--executor-memory 8G --driver-memory 4G
+2️⃣ Optimize Data Partitioning
+Increase partitions for large data (df.repartition(200)).
+Reduce partitions before writing output (df.coalesce(10)).
+3️⃣ Use DataFrame API Instead of RDDs (DataFrames are optimized with Catalyst and Tungsten).
+4️⃣ Persist/Clear Intermediate Data
+Use df.persist() to cache frequently used data.
+Use df.unpersist() to free up memory when done.
+5️⃣ Use Columnar File Formats (Parquet/ORC) (Reduces memory usage vs. CSV/JSON).
+6️⃣ Avoid Collecting Large Data to Driver
+❌ Avoid df.collect().
+✅ Use .show(), .take(n), or .limit(n).
+
+
+Delta lake:
+SELECT * FROM sales_data VERSION AS OF 5;
+
+OPTIMIZE sales_data ZORDER BY (region, order_date);
+
+VACUUM sales_data;(delete older than 7 days)
+VACUUM sales_data RETAIN 24 HOURS;
+VACUUM sales_data RETAIN 24 HOURS DRY RUN
