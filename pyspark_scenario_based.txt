@@ -1,0 +1,15 @@
+Tuing:
+
+1️⃣ Use DataFrame API Instead of RDD (DataFrames are optimized with Catalyst and Tungsten).
+2️⃣ Enable Predicate Pushdown (Filter data early to reduce I/O).
+3️⃣ Broadcast Small Tables in Joins (Avoid shuffle joins using broadcast()).
+4️⃣ Optimize Shuffling
+
+Increase partitions for large datasets (repartition()).
+Reduce partitions for smaller datasets (coalesce()).
+5️⃣ Cache & Persist Frequently Used Data (df.cache() or df.persist()).
+6️⃣ Use Columnar File Formats (Prefer Parquet/ORC over CSV for better compression & performance).
+7️⃣ Avoid UDFs When Possible (Use built-in Spark functions for better optimization).
+8️⃣ Tune Spark Configurations
+Adjust spark.sql.shuffle.partitions.
+Optimize executor memory (--executor-memory & --executor-cores).
