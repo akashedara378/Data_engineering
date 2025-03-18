@@ -34,6 +34,9 @@ CREATE TABLE employee (
 create index index1 on table1(col1);
 
 create index index2 on table1(col2,col3);
+
+-- ✔ Use Indexing for large datasets, WHERE conditions, JOIN, ORDER BY, and GROUP BY.
+-- ❌ Avoid Indexing on small tables, frequently updated columns, or columns with too many duplicates.
     
 -- insert
 INSERT INTO customers(first_name, last_name, points) VALUES ('Akash', 'edara', default);
