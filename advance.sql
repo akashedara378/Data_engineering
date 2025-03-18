@@ -13,6 +13,21 @@ cte1 c
 on p.product_id = c.product_id and c.rn=1;
 
 
+--- find duplicates and delete
+SELECT name, email, department, COUNT(*) AS duplicate_count
+FROM Employees
+GROUP BY name, email, department
+HAVING COUNT(*) > 1;
+
+WITH Ranked AS (
+    SELECT id, 
+           ROW_NUMBER() OVER (PARTITION BY name, email, department ORDER BY id) AS row_num
+    FROM Employees
+)
+DELETE FROM Employees WHERE id IN (
+    SELECT id FROM Ranked WHERE row_num > 1
+);
+
 
 ---------
 -- find the top 3 customers who have spent the most in the last 6 months."
