@@ -83,8 +83,20 @@ bucketed_df.show()
 df1 = spark.read.table("bucketed_table")
 df2 = spark.read.table("another_bucketed_table")  # Assume this is also bucketed on 'id'
 
+# salting
+from pyspark.sql.functions import col, concat_ws, lit, rand
+
+# Add a random salt value (1-5) to store_id
+df_salted = df.withColumn("salt", (rand() * 5).cast("int"))
+df_salted = df_salted.withColumn("store_salt", concat_ws("_", col("store_id"), col("salt")))
+
+# Now group by the new salted key instead of store_id
+df_salted.groupBy("store_salt").sum("sales").show()
+
 # Perform Optimized Join
 joined_df = df1.join(df2, "id")
+
+# The same store_id = 1 is now split across multiple partitions (1_0, 1_1, 1_2...).
 
 # COMMAND ----------
 
@@ -552,3 +564,30 @@ delta_table.delete("id = 3")  # Deletes Charlie's record
 df_updated = spark.read.format("delta").load(delta_path)
 df_updated.show()
 
+
+
+
+
+# ____advacne
+df = spark.read.format("json").option("badRecordsPath", "/bad_records/").load("path")
+df = spark.read.format("csv").option("mode", "DROPMALFORMED").load("path")
+df = spark.read.format("csv").option("mode", "FAILFAST").load("path")
+
+# pytest
+import pytest
+from pyspark.sql import SparkSession
+from my_spark_job import transform_data  # Your function to test
+
+@pytest.fixture(scope="session")
+def spark():
+    return SparkSession.builder.master("local[*]").appName("test").getOrCreate()
+
+def test_transform_data(spark):
+    input_data = [(1, "Alice", 25), (2, "Bob", 30)]
+    schema = ["id", "name", "age"]
+    input_df = spark.createDataFrame(input_data, schema)
+
+    result_df = transform_data(input_df)  # Apply your transformation
+
+    assert result_df.count() == 2
+    assert result_df.filter(result_df.name == "Alice").count() == 1
