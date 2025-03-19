@@ -40,3 +40,26 @@ OPTIMIZE sales_data ZORDER BY (region, order_date);
 VACUUM sales_data;(delete older than 7 days)
 VACUUM sales_data RETAIN 24 HOURS;
 VACUUM sales_data RETAIN 24 HOURS DRY RUN
+
+
+Total Executors= Executor Cores/Total Cluster Cores
+​Executor Memory=Total Available Memory/Total Executors
+
+
+4️⃣ How Do You Ensure Data Consistency and Fault Tolerance in a Distributed ETL Pipeline?
+✅ Key Techniques:
+Idempotency: Ensure reprocessing does not duplicate data (e.g., use unique keys).
+Checkpointing: Use checkpointLocation in Spark Streaming to track progress.
+ACID Transactions: Use Delta Lake for atomic writes & schema evolution.
+Retry Logic: Implement retries for transient failures (e.g., ADF retries on failure).
+
+​5️⃣ How Do You Handle Late-Arriving Data in Spark Streaming?
+✅ Solutions:
+1️⃣ Watermarking
+Define withWatermark("event_time", "10 minutes") to allow a grace period for late events.
+2️⃣ Event-Time Processing
+Use windowing functions (e.g., df.groupBy(window(col("timestamp"), "5 minutes"))).
+3️⃣ Reprocessing Late Data
+Store raw events in Delta Lake and reprocess late data periodically.
+4️⃣ Joining Late Events with Previous Data
+Use stateful aggregations with mapWithState() to update previously computed results.
