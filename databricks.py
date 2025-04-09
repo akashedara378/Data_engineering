@@ -103,3 +103,21 @@ for table_name, path in delta_tables.items():
               table=table_name,
               mode="overwrite",  # or "append"
               properties=jdbc_properties)
+
+
+#SCD2
+# First expire old rows (update is_current and end_date)
+delta_table.alias("target").merge(
+    source_df.alias("source"),
+    "target.emp_id = source.emp_id AND target.is_current = true AND (target.name != source.name OR target.city != source.city)"
+).whenMatchedUpdate(set={
+    "end_date": "current_date()",
+    "is_current": "false"
+}).whenNotMatchedInsert(values={
+    "emp_id": "source.emp_id",
+    "name": "source.name",
+    "city": "source.city",
+    "start_date": "source.start_date",
+    "end_date": "source.end_date",
+    "is_current": "source.is_current"
+}).execute()
