@@ -65,3 +65,41 @@ delta_table.delete("id = 3")  # Deletes Charlie's record
 # Read updated data
 df_updated = spark.read.format("delta").load(delta_path)
 df_updated.show()
+
+
+# writing delta tables to sql db:
+from pyspark.sql import SparkSession
+
+# Initialize Spark Session
+spark = SparkSession.builder \
+    .appName("BulkDeltaToSQL") \
+    .getOrCreate()
+
+# Delta table locations in ADLS Gen2
+delta_tables = {
+    "customer": "abfss://<container>@<storage_account>.dfs.core.windows.net/delta/customer",
+    "orders": "abfss://<container>@<storage_account>.dfs.core.windows.net/delta/orders",
+    "products": "abfss://<container>@<storage_account>.dfs.core.windows.net/delta/products",
+    "invoices": "abfss://<container>@<storage_account>.dfs.core.windows.net/delta/invoices",
+    "returns": "abfss://<container>@<storage_account>.dfs.core.windows.net/delta/returns"
+}
+
+# JDBC connection details
+jdbc_url = "jdbc:sqlserver://<onprem-ip>:1433;databaseName=<db_name>"
+jdbc_properties = {
+    "user": "<username>",
+    "password": "<password>",
+    "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+}
+
+# Loop over each delta table and load to SQL
+for table_name, path in delta_tables.items():
+    print(f"Processing table: {table_name}")
+    df = spark.read.format("delta").load(path)
+
+    # Write to on-prem SQL
+    df.write \
+        .jdbc(url=jdbc_url,
+              table=table_name,
+              mode="overwrite",  # or "append"
+              properties=jdbc_properties)
