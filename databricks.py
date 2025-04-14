@@ -121,3 +121,30 @@ delta_table.alias("target").merge(
     "end_date": "source.end_date",
     "is_current": "source.is_current"
 }).execute()
+
+
+from delta.tables import DeltaTable
+from pyspark.sql.functions import col
+
+# Load target (gold) delta table
+target_table = DeltaTable.forPath(spark, "<path-to-gold-table>")
+
+# Load incoming data from silver/bronze
+incoming_df = spark.read.format("delta").load("<path-to-incoming-data>")
+
+# Optional: Filter incoming data to keep only latest (if required)
+# incoming_df = incoming_df.withColumn("ingestion_ts", current_timestamp())
+
+# Merge
+target_table.alias("target").merge(
+    incoming_df.alias("source"),
+    "target.id = source.id"
+).whenMatchedUpdate(condition="""
+    target.col1 != source.col1 OR
+    target.col2 != source.col2 OR
+    target.col3 != source.col3
+""", set={
+    "col1": "source.col1",
+    "col2": "source.col2",
+    "col3": "source.col3"
+}).whenNotMatchedInsertAll().execute()
