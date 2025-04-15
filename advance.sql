@@ -84,3 +84,26 @@ CREATE TABLE Users (
 4. select and limit
 5. materialized views
 
+WITH Filtered AS (
+    SELECT *
+    FROM Stadium
+    WHERE people >= 100
+),
+Grouped AS (
+    SELECT *,
+           id - ROW_NUMBER() OVER (ORDER BY id) AS grp
+    FROM Filtered
+),
+Final AS (
+    SELECT *
+    FROM Grouped
+    WHERE grp IN (
+        SELECT grp
+        FROM Grouped
+        GROUP BY grp
+        HAVING COUNT(*) >= 3
+    )
+)
+SELECT id, visit_date, people
+FROM Final
+ORDER BY visit_date;
