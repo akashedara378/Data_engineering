@@ -22,6 +22,9 @@ run_date = dbutils.widgets.get("run_date")
 
 print(f"Processing file: {input_file}, Output path: {output_path}, Run date: {run_date}")
 
+dbutils.notebook.exit(str(my_var))
+result = dbutils.notebook.run("other_notebook", 60)
+print(result)  # will print the string output
 
 
 #Delta tables
