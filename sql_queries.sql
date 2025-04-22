@@ -1,4 +1,7 @@
 
+-- Global tables and local tables
+-- Primary Index and secondary Index
+    
 create database db1;
 create database if not exists db1;
 
