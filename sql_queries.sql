@@ -1,5 +1,14 @@
 
 -- Global tables and local tables
+CREATE TABLE #TempEmployee (
+    Id INT,
+    Name VARCHAR(100)
+);-- Only visible to your session
+CREATE TABLE ##GlobalTempEmployee (
+    Id INT,
+    Name VARCHAR(100)
+); -- Any session can access this table until the last one using it disconnects
+
 -- Primary Index and secondary Index
     
 create database db1;
