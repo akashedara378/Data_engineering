@@ -475,6 +475,16 @@ df2 = df1.groupBy(df.name).agg(collect_set(struct("item","total_weight")).alias(
 df2.display()
 
 #rdd
+# Map and Flatmap
+rdd = sc.parallelize(["hello world", "how are you"])
+mapped = rdd.map(lambda x: x.split(" "))
+print(mapped.collect()) -> [['hello', 'world'], ['how', 'are', 'you']]
+
+rdd = sc.parallelize(["hello world", "how are you"])
+flat_mapped = rdd.flatMap(lambda x: x.split(" "))
+print(flat_mapped.collect()) -> ['hello', 'world', 'how', 'are', 'you']
+
+
 from pyspark import SparkContext
 
 sc = SparkContext("local", "maps")
@@ -485,10 +495,11 @@ rd1_maped = rd1.map(lambda x:x*2)
 rd1_maped.collect()
 
 
-rd2 = sc.parallelize([1,2,3])
-rd2_maped = rd2.flatMap(lambda x:(x*2,x*3))
+rd2 = sc.parallelize([1, 2, 3])
+rd2_mapped = rd2.flatMap(lambda x: [x * 2, x * 3])
 
-rd2_maped.collect()
+rd2_mapped.collect()
+
 
 
 rd3 = sc.parallelize([('a', 1), ('b', 2), ('a', 3), ('b', 4)])
