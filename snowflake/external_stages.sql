@@ -27,4 +27,28 @@ FROM @my_s3_stage
 FILE_FORMAT = (FORMAT_NAME = 'csv_format');
 
 
+-- for continous data loading.
 
+CREATE OR REPLACE PIPE employee_pipe
+  AUTO_INGEST = TRUE
+  AS
+  COPY INTO employee
+  FROM @my_s3_stage
+  FILE_FORMAT = (FORMAT_NAME = 'csv_format');
+
+-- To trigger the pipe when a new file is uploaded:
+
+-- Go to your S3 bucket > Properties > Event notifications
+
+-- Create an event:
+
+-- Event type: PUT
+
+-- Prefix: folder path where files land
+
+-- Destination: SNS topic(which snow pipe listen to)
+
+-- Snowflake will provide the SNS topic and subscription when you run show pipes:
+
+
+show pipes;
