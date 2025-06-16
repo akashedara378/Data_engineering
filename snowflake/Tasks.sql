@@ -33,6 +33,8 @@ SELECT a.emp_id, a.emp_name, a.department FROM employee_task_stream a;
 
 ALTER TASK load_employee_history_task RESUME;
 
+ALTER TASK load_employee_history_task SUSPEND;
+
 
 -- TESTING
 INSERT INTO employee_task_internal VALUES
