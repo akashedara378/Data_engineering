@@ -1,3 +1,62 @@
+-- Internal
+
+CREATE OR REPLACE TABLE employee_task_internal (
+  emp_id INT,
+  emp_name STRING,
+  department STRING
+);
+
+
+INSERT INTO employee_task_internal VALUES
+  (1, 'Alice', 'HR'),
+  (2, 'Bob', 'IT');
+
+CREATE OR REPLACE STREAM employee_task_stream
+ON TABLE employee_task_internal
+APPEND_ONLY = TRUE;
+
+
+CREATE OR REPLACE TABLE employee_task_target (
+  emp_id INT,
+  emp_name STRING,
+  department STRING
+);
+
+
+CREATE OR REPLACE TASK load_employee_history_task
+  WAREHOUSE = WAR1
+  SCHEDULE = '5 MINUTE'
+AS
+INSERT INTO employee_task_target
+SELECT * FROM employee_task_stream;
+
+
+ALTER TASK load_employee_history_task RESUME;
+
+
+-- TESTING
+INSERT INTO employee_task_internal VALUES
+  (3, 'Charlie', 'Finance'),
+  (4, 'Diana', 'HR');
+
+
+EXECUTE TASK load_employee_history_task;
+
+
+SELECT * FROM employee_task_target;
+
+SELECT * from employee_task_internal;
+
+SELECT * FROM employee_task_stream;
+
+
+
+SELECT *
+FROM TABLE(SNOWFLAKE.INFORMATION_SCHEMA.TASK_HISTORY())
+WHERE TASK_NAME = 'LOAD_EMPLOYEE_HISTORY_TASK'
+ORDER BY COMPLETED_TIME DESC;
+-- EXTERNAL
+
 CREATE OR REPLACE STORAGE INTEGRATION s3_int
   TYPE = EXTERNAL_STAGE
   STORAGE_PROVIDER = S3
