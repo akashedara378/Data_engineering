@@ -25,10 +25,10 @@ CREATE OR REPLACE TABLE employee_task_target (
 
 CREATE OR REPLACE TASK load_employee_history_task
   WAREHOUSE = WAR1
-  SCHEDULE = '5 MINUTE'
+  SCHEDULE = '1 MINUTE'
 AS
 INSERT INTO employee_task_target
-SELECT * FROM employee_task_stream;
+SELECT a.emp_id, a.emp_name, a.department FROM employee_task_stream a;
 
 
 ALTER TASK load_employee_history_task RESUME;
@@ -55,6 +55,11 @@ SELECT *
 FROM TABLE(SNOWFLAKE.INFORMATION_SCHEMA.TASK_HISTORY())
 WHERE TASK_NAME = 'LOAD_EMPLOYEE_HISTORY_TASK'
 ORDER BY COMPLETED_TIME DESC;
+
+SHOW TASKS;
+
+SELECT * FROM TABLE (INFORMATION_SCHEMA.TASK_HISTORY(TASK_NAME =>  'load_employee_history_task'));
+
 -- EXTERNAL
 
 CREATE OR REPLACE STORAGE INTEGRATION s3_int
