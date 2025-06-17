@@ -4,6 +4,9 @@ DROPMALFORMED	Skips rows that don’t match the schema.
 FAILFAST	Fails immediately when it sees a bad record.
 LEGACY	Used in earlier versions (not common anymore).
 
+df = spark.read.format("json").option("badRecordsPath", "/bad_records/").load("path")
+df = spark.read.format("csv").option("mode", "DROPMALFORMED").load("path")
+df = spark.read.format("csv").option("mode", "FAILFAST").load("path")
 
 from pyspark.sql import SparkSession
 
