@@ -54,4 +54,7 @@ sudo ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic orders --de
 sudo ./bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group og --describe 
 
 
+sudo docker run --rm -d -p 8080:8080 -e KAFKA_CLUSTERS_0_NAME=my-cluster -e KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=127.0.0.1:9092 --name kafkaui provectuslabs/kafka-ui
+
+
 
