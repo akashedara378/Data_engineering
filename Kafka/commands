@@ -11,6 +11,13 @@ sudo ./bin/kafka-topics.sh \
 --partitions 1 \
 --replication-factor 1
 
+sudo ./bin/kafka-topics.sh \
+> --create \
+> --topic orders \
+> --bootstrap-server localhost:9092 \
+> --partitions 2 \
+> --replication-factor 1
+
 
 DEFAULT PROD AND CONSU:
 sudo ./bin/kafka-console-producer.sh \
@@ -22,5 +29,29 @@ sudo ./bin/kafka-console-consumer.sh \
 > --bootstrap-server localhost:9092 \
 > --topic test-topic \
 > --from-beginning
+
+
+
+sudo ./bin/kafka-console-producer.sh \
+--bootstrap-server localhost:9092 \
+--topic orders \ 
+--property parse.key=true \
+--property key.separator=:
+>keyA: Hello this is msg from keya
+>keyB: Hello this is msg from keyb
+
+
+sudo ./bin/kafka-console-consumer.sh \
+> --bootstrap-server localhost:9092 \
+> --topic orders \
+> --group og \
+
+
+sudo ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+sudo ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic orders --describe
+
+sudo ./bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group og --describe 
+
 
 
