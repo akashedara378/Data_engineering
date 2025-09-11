@@ -1,0 +1,191 @@
+RDD
+--> IT IS IMMUTABLE
+--> LOWER LEVEL API
+--> DO NOT USE OPTIMIZER
+--> LAZY EXECUTION
+--> ARE NOT STRUCTURED
+
+FROM SPARK V2
+--> HIGH LEVEL API
+--> CATALYST OPTIMIZER WHICH RUNS ON TUNGSTEN ENGINE
+--> SQL MODEL
+--> DATAFRAMES ARE HIGH LEVEL API, INTERNALLY IT IS RDD
+
+DATAFRAMES
+--> DATAFRAME IS A STRUCTURED LOGICAL OBJECT WHICH RESEMBLES RDBMS TABLE
+--> DATAFRAME CONTAINS SCHEMA (STRUCTURE) AND DATA (ROWS)
+--> DATAFRAME IS EAGER EXECUTION AT SCHEMA LEVEL AND LAZY EXECUTION AT DATA LEVEL.
+--> DATAFRAMES ARE NOT SAVED , WE CAN SAVE THE DATAFRAME BY ADDING SCHEMA TO THE METASTORE OR SAVING AS PARQUET FILES.
+--> DATAFRAME IS IMMUTABLE, WE HAVE TO CREATE DATAFRAME FROM DATAFRAME WHICH IS CALLED TRANSFORMATIONS: select, where,groupBy,join,orderBy
+--> NO DATAFRAME WILL BE EXECUTED OR CREATED UNTIL WE PROVIDE ACTION COMMAND: show,take,collect,write
+
+    * TRANSFORMATION COMMANDS MUST BE FOLLOWED BY ACTION COMMANDS 
+
+   HOW TO CREATE DATAFRAMES?
+ * DATAFRAMES ARE OF 2 TYPES: BOUNDED (ONE TIME READ); UNOUNDED (REAL TIME STREAMING)
+ * BOUNDED: spark.read.  UNBOUNDED: spark.readStream.
+
+ --> FROM FILES
+       1. PARQUET FILES:  spark.read.parquet("/user/root/base/*.parquet"); printSchema()
+       2. CSV FILES: emp=spark.read.option("header","true").option("inferschema","true").csv("/user/root/EMP.csv")
+       3. JSON FILES: devices=spark.read.json("/user/root/devices.json")
+
+* FOR BOTH CSV AND JSON FILES SPARK HAS TO READ THE DATA TO INTERPRET THE SCHEMA. HENCE RECOMMENDED TO CREATE EXPLICITLY THE SCHEMA AND ATTACH
+             df=spark.read.schema(<schemaname>).
+
+   df.write.save("/path/newdirectory"): SAVE IN PARQUET FORMAT UNDER THE DIRECTORY
+   df.write.mode("append").save("/path/existingdirectory"): SAVE IN PARQUET FORMAT UNDER THE EXISTING DIRECTORY
+   df.write.format("json").save(/"PATH"): WRITE THE RESULT IN json FORMAT.
+
+  METASTORE --> CATALOG --> SCHEMA --> VOLUMES --> ADD DATA
+
+     TRANSFORMATIONS
+     
+      SELECT
+      WHERE
+      JOIN
+      GROUPING
+      SORTING
+
+      select: 
+         SQL: SELECT * FROM EMPLOYEES;
+         DATAFRAME: df.show(df.count(*))  OR df.select("*").show()
+
+         SQL: SELECT ENAME,SALARY,DEPTNO FROM EMPLOYEES;
+         DATAFRAME: emp.select("ENAME","SALARY","DEPTNO").show()         
+
+
+          ARTHIMATIC OPERATORS: +  -  *  /
+          SQL: SELECT ENAME,SALARY*12 AS "ANNUSALS" FROM EMPLOYEES
+          DATAFRAME: emp.select("ENAME", emp.SALARY*12).show() OR  annsals=emp.select("ENAME",(emp.SALARY*12).alias("ANNSALS"))
+
+          FUNCTIONS
+          SQL: SELECT LOWER(ENAME),SALARY FROM EMPLOYEES;
+          DATAFRAME: emp.select(lower("ENAME"),"SALARY").show()
+
+ 
+           CREATE A DATAFRAME CALLED ANNULSALS WHICH MUST CONTAIN ALL THE COLUMNS OF EMP DATAFRAME AND A ADDITIONAL COLUMN WITH ANNUAL SALARIES
+            annsals=emp.select("*",(emp.SALARY*12).alias("ANNSALS"))
+
+       
+        where:
+           SQL: SELECT * FROM EMPLOYEES WHERE SALARY > 2000;
+           DATAFRAME: emp.where("SALARY > 2000")
+                      emp.where("ENAME='ALLEN'")  OPERATORS: AND OR NOT, > < != ==  is null, is not null
+
+
+           emp=spark.read.parquet("/user/root/EMP.parquet")
+           empcols=emp.select("ENAME","SALARY","DEPTNO")
+           highsals=empcols.where("SALARY > 2000")
+           highsals.show()
+
+          
+           CHAINED TRANSFORMATION
+           highsals=spark.read.parquet("/user/root/EMP.parquet").select("ENAME","SALARY","DEPTNO").where("SALARY > 2000")
+
+
+        groupBy:
+           SQL: SELECT MAX(SALARY) FROM EMPLOYEES;
+           DATAFRAME:  emp.groupBy().max("SALARY")
+
+           SQL: SELECT DEPTNO,SUM(SALARY) FROM EMPLOYEES GROUP BY DEPTNO;
+           DATAFRAME: emp.groupBy("DEPTNO").sum("SALARY").show();   emp.groupBy("DEPTNO").agg(sum("SALARY").alias("SUM_OF_SALS")).show()
+                      emp.groupBy("DEPTNO","JOB").agg(sum("SALARY").alias("SUM_OF_SALS")).show()
+
+        orderBy:
+           SQL: SELECT DEPTNO,SUM(SALARY) FROM EMPLOYEES GROUP BY DEPTNO ORDER BY DEPTNO;
+           DATAFRAME: asc(), desc():  emp.groupBy("DEPTNO","JOB").agg(sum("SALARY").alias("SUM_OF_SALS")).orderBy("DEPTNO").show()
+                      emp.groupBy("DEPTNO","JOB").agg(sum("SALARY").alias("SUM_OF_SALS")).orderBy("DEPTNO",desc("JOB")).show()
+
+        
+       join:
+            LOGICAL: INNER/OUTER/LEFT_SEMI/LEFT_ANTI
+            PHYSICAL: BROADCAST/NESTED LOOP/SORT MERGE/SHUFFLE/HASH
+
+             INNER: ONLY MATCHED RECORDS -> emp.join(dept,emp.deptno=dept.dno) OR emp.join(dept,"DEPTNO")
+             OUTER: MATCHED AND UNMATCHED RECORDS -> emp.join(dept,"DEPTNO",left_outer/right_outer/full_outer)
+             left_semi: ONLY MATCHED RECORDS, BUT IN RESULT ONLY COLUMNS FROM LEFT SIDE DATAFRAME WILL BE SHOWN.: emp.join(dept,"DEPTNO","left_semi")
+             left_anti: ONLY UNMATCHED RECORDS, BUT IN RESULT ONLY COLUMNS FROM LEFT SIDE DATAFRAME WILL BE SHOWN.: emp.join(dept,"DEPTNO","left_anti")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
