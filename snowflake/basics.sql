@@ -1,6 +1,14 @@
-use role accountadmin;
+-- roles and warehouses
 
+use role accountadmin;
 use warehouse war1;
+CREATE WAREHOUSE WH1;
+SHOW WAREHOUSES;
+ALTER WAREHOUSE WH1 SET WAREHOUSE_SIZE=MEDIUM;
+DROP WAREHOUSE WH1;
+CREATE WAREHOUSE WH2 MAX_CLUSTER_COUNT=3;
+
+
 
 create or replace database db;
 
