@@ -31,7 +31,16 @@ VACUUM removes these obsolete files to free up storage.
 
 VACUUM my_table RETAIN 168 HOURS
 
-                                                                                          
 
+🔹 What is AQE (Adaptive Query Execution)?
+AQE is a feature in Spark SQL that dynamically optimizes query plans at runtime based on actual data statistics. 
+  It helps improve performance by making smarter decisions after the query starts executing.  
+
+✅ Key Features of AQE
+1. tuning shuffle partitions: 200 part but df is having only 15 distinct keys.spark will colease into 15 part.
+2. optimizing joins: SMJ(sort merge join to BJ join).
+3. optimizing skewing joins: large part into smaller part.
+
+                                                                                          
 
                                                                                         
