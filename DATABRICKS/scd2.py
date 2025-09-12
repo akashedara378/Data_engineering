@@ -38,3 +38,9 @@ df_final = df_unchanged.unionByName(df_expired).unionByName(df_changed)
 
 # Overwrite the Delta table
 df_final.write.format("delta").mode("overwrite").save(delta_table_path)
+
+
+
+
+
+
