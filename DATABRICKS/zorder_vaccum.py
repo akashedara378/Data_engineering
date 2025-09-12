@@ -6,9 +6,30 @@ How it works:
 Delta Lake uses data skipping to avoid scanning irrelevant files.
 ZORDER BY physically reorganizes the data using a multi-dimensional clustering technique (Z-order curve).
 It improves query performance by reducing the number of files scanned.
-
+                                                                                          
 OPTIMIZE my_table
 ZORDER BY (member_id, diagnosis_code)
+
+OPTIMIZE delta.`/mnt/datalake/healthcare/FACT_HCE`
+ZORDER BY (member_id, service_date)                                                                                          
+
+Best used when:
+you have large datasets.
+You frequently filter on specific columns.
+You want to reduce query latency.                                                                                          
+
+
+
+
+🔹 VACUUM in Delta Lake
+Purpose:
+VACUUM is used to clean up old files that are no longer needed due to updates or deletes. Delta Lake uses versioning, so it keeps older versions of data for time travel and rollback.
+How it works:
+
+When you update or delete data, Delta Lake creates new files and marks old ones as obsolete.
+VACUUM removes these obsolete files to free up storage.
+
+VACUUM my_table RETAIN 168 HOURS
 
                                                                                           
 
