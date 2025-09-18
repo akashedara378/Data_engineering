@@ -12,33 +12,21 @@ sudo ./bin/kafka-topics.sh \
 --replication-factor 1
 
 sudo ./bin/kafka-topics.sh \
-> --create \
-> --topic orders \
-> --bootstrap-server localhost:9092 \
-> --partitions 2 \
-> --replication-factor 1
-
+--delete \ 
+--topic test-topic \ 
+--bootstrap-server localhost:9092
 
 DEFAULT PROD AND CONSU:
 sudo ./bin/kafka-console-producer.sh \
 --bootstrap-server localhost:9092 \
 --topic test-topic
 
+provides terminal space where we can send messages..
 
 sudo ./bin/kafka-console-consumer.sh \
 > --bootstrap-server localhost:9092 \
 > --topic test-topic \
 > --from-beginning
-
-
-
-sudo ./bin/kafka-console-producer.sh \
---bootstrap-server localhost:9092 \
---topic orders \ 
---property parse.key=true \
---property key.separator=:
->keyA: Hello this is msg from keya
->keyB: Hello this is msg from keyb
 
 
 sudo ./bin/kafka-console-consumer.sh \
@@ -53,8 +41,66 @@ sudo ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic orders --de
 
 sudo ./bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group og --describe 
 
+ ./kafka-console-consumer.sh \
+            --bootstrap-server localhost:29092 \
+            --describe\
+            --all-groups
+
 
 sudo docker run --rm -d -p 8080:8080 -e KAFKA_CLUSTERS_0_NAME=my-cluster -e KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=127.0.0.1:9092 --name kafkaui provectuslabs/kafka-ui
 
+
+partitions:
+sudo ./bin/kafka-topics.sh \
+> --create \
+> --topic orders \
+> --bootstrap-server localhost:9092 \
+> --partitions 2 \
+> --replication-factor 1
+
+sudo ./bin/kafka-console-producer.sh \
+--bootstrap-server localhost:9092 \
+--topic orders \ 
+--property parse.key=true \
+--property key.separator=:
+>keyA: Hello this is msg from keya
+>keyB: Hello this is msg from keyb
+
+in this case we cant see whihc partition key A msgs will go. but to see that we do see in data directory logs.
+
+offset example:
+## Creating the Topic
+
+        ./kafka-topics.sh \
+            --bootstrap-server localhost:29092 \
+            --create \
+            --topic kafka.usecase.students \
+            --partitions 2 \
+            --replication-factor 1
+
+## Describe the Topic
+
+        ./kafka-topics.sh \
+            --bootstrap-server localhost:29092 \
+            --topic kafka.usecase.students \
+            --describe
+
+## Publish to the Topic
+
+        ./kafka-console-producer.sh \
+            --bootstrap-server localhost:29092 \
+            --property "parse.key=true" \
+            --property "key.separator=:" \
+            --topic kafka.usecase.students
+
+## Consume Message from the Topic
+
+        ./kafka-console-consumer.sh \
+            --bootstrap-server localhost:29092 \
+            --topic kafka.usecase.students \
+            --group usecase-consumer-group \
+            --property print.key=true \
+            --property key.separator=" = " \
+            --from-beginning
 
 
